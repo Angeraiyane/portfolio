@@ -1,0 +1,103 @@
+/* ==========================================================================
+   global.css — les règles communes à tout le site
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LES "DESIGN TOKENS"
+   Des variables CSS (--nom) qui stockent nos couleurs, polices et tailles.
+   On ne tape jamais une couleur en dur ailleurs : on écrit var(--lapis).
+   Si un jour on veut changer le bleu, on le change ICI, et tout le site suit.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Fond et texte */
+  --obsidian: #06070b;        /* le fond noir du site */
+  --ink: #e9ecf5;             /* texte principal */
+  --muted: #9aa3b8;           /* texte secondaire */
+  --faint: #5f6880;           /* petites indications */
+  --line: #232a3b;            /* bordures discrètes */
+
+  /* Lapis-lazuli : notre gemme emblème */
+  --lapis: #1d3f8f;
+  --lapis-light: #3563c9;
+  --lapis-deep: #0a1634;
+
+  /* Pyrite : les paillettes dorées du lapis, pour les accents */
+  --pyrite: #c9a54a;
+  --pyrite-light: #e6c773;
+
+  /* Les gemmes des sections (ambiance uniquement, jamais affichées en texte) */
+  --quartz-rose: #e8b4c0;
+  --emerald: #0b5d43;
+  --amethyst: #6b3fa0;
+  --ruby: #9b1b30;
+
+  /* Polices : si Google Fonts ne charge pas, on retombe sur les suivantes */
+  --font-display: 'Bodoni Moda', Georgia, serif;
+  --font-body: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, monospace;
+
+  /* Mise en page */
+  --max-width: 1240px;
+  --gutter: clamp(20px, 4vw, 48px);   /* clamp(min, idéal, max) : s'adapte à la largeur de l'écran */
+}
+
+/* --------------------------------------------------------------------------
+   2. REMISE À ZÉRO
+   Chaque navigateur a ses propres marges par défaut ; on les neutralise.
+   box-sizing: border-box = la largeur d'un élément INCLUT son padding et sa bordure.
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  margin: 0;
+  background: var(--obsidian);
+  color: var(--ink);
+  font: 400 17px/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;               /* empêche tout débordement horizontal sur mobile */
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.05; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+img { max-width: 100%; display: block; }
+a { color: var(--pyrite); }
+a:hover { color: var(--pyrite-light); }
+
+/* Contour visible au clavier (Tab) : indispensable pour l'accessibilité */
+:focus-visible { outline: 2px solid var(--pyrite); outline-offset: 3px; border-radius: 4px; }
+
+/* Si la personne a demandé "moins d'animations" dans son système, on respecte */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   3. CLASSES UTILITAIRES (réutilisées partout)
+   -------------------------------------------------------------------------- */
+.container { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--gutter); }
+
+.section { padding-block: clamp(72px, 10vw, 128px); }
+
+.section-title { font-size: clamp(40px, 6vw, 64px); margin-bottom: 32px; }
+
+.mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 0 24px; border-radius: 8px;
+  font: 500 16px var(--font-body); text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--lapis); color: #fff; }
+.btn-primary:hover { background: var(--lapis-light); color: #fff; }
+.btn-ghost { border: 1px solid #3a4258; color: var(--ink); }
+.btn-ghost:hover { border-color: var(--pyrite); color: var(--ink); }
+.btn-gold { background: var(--pyrite); color: var(--lapis-deep); font-weight: 600; }
+.btn-gold:hover { background: var(--pyrite-light); color: var(--lapis-deep); }
+
+/* Texte réservé aux lecteurs d'écran (invisible à l'œil, lu à voix haute) */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -1,0 +1,75 @@
+---
+/* Hero.astro — le haut de la page d'accueil.
+   Plus tard, la scène 3D des gemmes viendra se placer derrière ce texte. */
+---
+
+<section id="accueil" class="hero">
+  <div class="container hero-inner">
+    <!-- data-decrypt : notre script repère cet attribut pour lancer l'effet -->
+    <p class="mono kicker" data-decrypt="AI & DATA ENGINEER">AI &amp; DATA ENGINEER</p>
+
+    <h1>Ange Raïyane<br />ESSOAZINA</h1>
+
+    <p class="lead">
+      Étudiant en Master AI &amp; Data Computing. Je conçois des pipelines de données
+      temps réel, des modèles d'apprentissage et des agents IA, de la donnée brute
+      jusqu'à la décision.
+    </p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="#projets">Voir mes projets</a>
+      <a class="btn btn-ghost" href="/cv-ange-essoazina.pdf">Télécharger le CV</a>
+    </div>
+
+    <p class="availability">Stage PFE recherché · 6 mois · dès janvier 2027</p>
+  </div>
+</section>
+
+<style>
+  .hero { min-height: min(86vh, 760px); display: flex; align-items: center; }
+  .hero-inner { display: flex; flex-direction: column; gap: 24px; padding-block: 48px 96px; }
+  .kicker { color: var(--pyrite); letter-spacing: 0.18em; min-height: 1.6em; }
+  h1 { font-size: clamp(48px, 8vw, 92px); letter-spacing: 0.01em; }
+  .lead { max-width: 52ch; font-size: clamp(17px, 1.6vw, 19px); color: #b7bfd1; }
+  .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+  .availability { font-size: 14px; color: var(--faint); }
+</style>
+
+<script>
+  /* ------------------------------------------------------------------------
+     L'EFFET "DÉCHIFFREMENT"
+     Un <script> dans un composant Astro est envoyé au navigateur du visiteur.
+     Astro le regroupe et l'optimise automatiquement.
+
+     Principe : on affiche des caractères au hasard, puis on "verrouille"
+     les vraies lettres une par une, de gauche à droite.
+     ------------------------------------------------------------------------ */
+  const GLYPHS = '#%&@$*+=<>/\\|01ΣΔλ';
+
+  function decrypt(el: HTMLElement) {
+    const target = el.dataset.decrypt ?? el.textContent ?? '';
+    let frame = 0;
+    const totalFrames = target.length * 3;     // ~3 images par lettre
+
+    function tick() {
+      // Combien de lettres sont déjà "verrouillées" à cette image
+      const locked = Math.floor(frame / 3);
+      let out = '';
+      for (let i = 0; i < target.length; i++) {
+        if (i < locked || target[i] === ' ') out += target[i];        // lettre définitive
+        else out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)]; // caractère au hasard
+      }
+      el.textContent = out;
+      frame++;
+      if (frame <= totalFrames) requestAnimationFrame(tick);          // image suivante (~60/s)
+      else el.textContent = target;
+    }
+    tick();
+  }
+
+  // On respecte le réglage "réduire les animations" du système.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion) {
+    document.querySelectorAll<HTMLElement>('[data-decrypt]').forEach(decrypt);
+  }
+</script>

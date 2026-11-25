@@ -1,0 +1,55 @@
+---
+/* ==========================================================================
+   BaseLayout.astro — le "squelette" commun à toutes les pages
+   --------------------------------------------------------------------------
+   Ce bloc entre les "---" s'exécute au moment où Astro CONSTRUIT le site,
+   jamais dans le navigateur du visiteur. On y prépare les données.
+   ========================================================================== */
+import '../styles/global.css';   // Astro inclut automatiquement ce CSS dans la page
+
+// Les "props" : les paramètres qu'une page peut passer à ce layout.
+// Exemple d'usage : <BaseLayout title="Projets" description="...">
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: 'fr' | 'en';
+}
+
+const {
+  title = 'Ange Raïyane ESSOAZINA — AI & Data Engineer',
+  description = "Portfolio d'Ange Raïyane ESSOAZINA, étudiant en Master AI & Data Computing : pipelines de données temps réel, apprentissage fédéré, agents IA.",
+  lang = 'fr',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO : ce que Google affiche dans ses résultats -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Ange Raïyane ESSOAZINA" />
+
+    <!-- Aperçu quand le lien est partagé (LinkedIn, WhatsApp...) -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Polices Google : "preconnect" ouvre la connexion en avance pour gagner du temps -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500&family=Hanken+Grotesk:wght@400;500;600&family=Martian+Mono:wght@300;400&display=swap"
+    />
+  </head>
+  <body>
+    <!-- <slot /> = l'endroit où le contenu de chaque page vient s'insérer -->
+    <slot />
+  </body>
+</html>

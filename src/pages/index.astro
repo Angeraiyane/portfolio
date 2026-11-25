@@ -1,16 +1,39 @@
 ---
+/* index.astro — la page d'accueil (fichier src/pages/index.astro = adresse "/").
+   On assemble ici les composants, comme des briques. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import DelphiBand from '../components/DelphiBand.astro';
+
+// Les sections à venir. data-gem indiquera plus tard à la scène 3D
+// quelle ambiance de gemme afficher quand on arrive sur la section.
+const sections = [
+  { id: 'apropos', title: 'À propos', gem: 'quartz-rose' },
+  { id: 'projets', title: 'Projets', gem: 'lapis' },
+  { id: 'experience', title: 'Expérience', gem: 'emerald' },
+  { id: 'competences', title: 'Compétences', gem: 'amethyst' },
+  { id: 'contact', title: 'Contact', gem: 'ruby' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <Header />
+  <main>
+    <Hero />
+    <DelphiBand />
+
+    {sections.map((s) => (
+      <section id={s.id} class="section" data-gem={s.gem}>
+        <div class="container">
+          <h2 class="section-title">{s.title}</h2>
+          <p class="placeholder">Section en construction.</p>
+        </div>
+      </section>
+    ))}
+  </main>
+</BaseLayout>
+
+<style>
+  .placeholder { color: var(--faint); }
+</style>

@@ -1,0 +1,59 @@
+---
+/* Header.astro — logo, navigation et choix de langue.
+   Les liens de navigation sont générés depuis un tableau :
+   pour ajouter une section, on ajoute une ligne ici, pas du HTML. */
+const links = [
+  { href: '#apropos', label: 'À propos' },
+  { href: '#projets', label: 'Projets' },
+  { href: '#experience', label: 'Expérience' },
+  { href: '#competences', label: 'Compétences' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<header class="header container">
+  <a href="#accueil" class="logo" aria-label="Accueil">
+    <!-- Notre gemme emblème en SVG : un lapis avec deux paillettes de pyrite -->
+    <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true">
+      <polygon points="50,4 92,30 80,86 20,86 8,30" fill="var(--lapis)" />
+      <polygon points="50,22 72,34 66,64 34,64 28,34" fill="var(--lapis-light)" />
+      <circle cx="40" cy="44" r="3" fill="var(--pyrite)" />
+      <circle cx="60" cy="56" r="2" fill="var(--pyrite)" />
+    </svg>
+    <span>A·R·E</span>
+  </a>
+
+  <nav aria-label="Navigation principale">
+    <ul>
+      {links.map((link) => (
+        <li><a href={link.href}>{link.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="lang" role="group" aria-label="Langue">
+    <a href="/" aria-current="true">FR</a>
+    <a href="/en/">EN</a>
+  </div>
+</header>
+
+<style>
+  /* Dans un fichier .astro, ce <style> ne s'applique QU'À ce composant :
+     .logo ici ne touchera jamais un autre .logo ailleurs. On dit qu'il est "scopé". */
+  .header {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 16px 32px; padding-block: 24px;
+    position: relative; z-index: 2;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+  .logo span { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.2em; }
+  nav ul { display: flex; flex-wrap: wrap; gap: 8px 28px; list-style: none; margin: 0; padding: 0; }
+  nav a { color: var(--muted); text-decoration: none; font-size: 15px; transition: color 0.2s; }
+  nav a:hover { color: var(--ink); }
+  .lang { display: flex; gap: 4px; font-family: var(--font-mono); font-size: 12px; }
+  .lang a {
+    display: grid; place-items: center; min-width: 44px; min-height: 36px;
+    border: 1px solid var(--line); border-radius: 6px; color: var(--muted); text-decoration: none;
+  }
+  .lang a[aria-current='true'] { background: var(--lapis); border-color: var(--lapis); color: #fff; }
+</style>

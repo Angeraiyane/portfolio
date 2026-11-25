@@ -1,0 +1,38 @@
+---
+/* DelphiBand.astro — le bandeau vers le double IA sur Delphi.
+   Simple lien : l'intégration en widget est payante. */
+const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';
+---
+
+<section class="container" aria-labelledby="delphi-title">
+  <div class="band">
+    <div class="text">
+      <div class="icon" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--pyrite-light)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4" />
+        </svg>
+      </div>
+      <div>
+        <h2 id="delphi-title">Parle à mon double IA</h2>
+        <p>Il a ma voix et connaît tous mes projets. Pose-lui tes questions, à l'écrit ou à l'oral, comme si tu me parlais.</p>
+      </div>
+    </div>
+    <div class="actions">
+      <!-- target="_blank" ouvre un nouvel onglet ; rel="noopener" est une protection de sécurité -->
+      <a class="btn btn-gold" href={DELPHI_URL} target="_blank" rel="noopener">Discuter</a>
+      <a class="btn btn-ghost" href={DELPHI_URL} target="_blank" rel="noopener">Appeler</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .band {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;
+    padding: 28px 32px; border: 1px solid #243564; border-radius: 18px; background: rgba(12, 22, 48, 0.6);
+  }
+  .text { display: flex; gap: 18px; align-items: center; flex: 1 1 460px; }
+  .icon { flex: none; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--pyrite); display: grid; place-items: center; }
+  h2 { font-size: 30px; margin-bottom: 6px; }
+  p { color: #b7bfd1; font-size: 15px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+</style>
