@@ -21,15 +21,24 @@
   --lapis-light: #3563c9;
   --lapis-deep: #0a1634;
 
-  /* Pyrite : les paillettes dorées du lapis, pour les accents */
-  --pyrite: #c9a54a;
-  --pyrite-light: #e6c773;
+  /* Accent : la lueur froide du lapis (liens, chiffres, focus).
+     Volontairement PAS de doré : chaque projet prend en plus la couleur de sa gemme. */
+  --accent: #9fb9ff;
+  --accent-strong: #d3defc;
 
   /* Les gemmes des sections (ambiance uniquement, jamais affichées en texte) */
   --quartz-rose: #e8b4c0;
   --emerald: #0b5d43;
   --amethyst: #6b3fa0;
   --ruby: #9b1b30;
+
+  /* Versions lumineuses des gemmes, lisibles sur fond noir (chiffres, titres au survol) */
+  --glow-lapis: #6f97ff;
+  --glow-sapphire: #7fd3f0;
+  --glow-emerald: #4fd39a;
+  --glow-ruby: #ff6b86;
+  --glow-amethyst: #b991ff;
+  --glow-citrine: #ffc45e;
 
   /* Polices : si Google Fonts ne charge pas, on retombe sur les suivantes */
   --font-display: 'Bodoni Moda', Georgia, serif;
@@ -62,11 +71,11 @@ body {
 h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.05; margin: 0; text-wrap: balance; }
 p { margin: 0; }
 img { max-width: 100%; display: block; }
-a { color: var(--pyrite); }
-a:hover { color: var(--pyrite-light); }
+a { color: var(--accent); }
+a:hover { color: var(--accent-strong); }
 
 /* Contour visible au clavier (Tab) : indispensable pour l'accessibilité */
-:focus-visible { outline: 2px solid var(--pyrite); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* Si la personne a demandé "moins d'animations" dans son système, on respecte */
 @media (prefers-reduced-motion: reduce) {
@@ -86,18 +95,43 @@ a:hover { color: var(--pyrite-light); }
 .mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; }
 
 .btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 48px; padding: 0 24px; border-radius: 8px;
-  font: 500 16px var(--font-body); text-decoration: none;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4em;
+  min-height: 48px; padding: 0 22px; border-radius: 2px;      /* angles quasi droits : plus "taillé" */
+  font: 500 15px var(--font-body); letter-spacing: 0.02em; text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-.btn:hover { transform: translateY(-1px); }
 .btn-primary { background: var(--lapis); color: #fff; }
 .btn-primary:hover { background: var(--lapis-light); color: #fff; }
 .btn-ghost { border: 1px solid #3a4258; color: var(--ink); }
-.btn-ghost:hover { border-color: var(--pyrite); color: var(--ink); }
-.btn-gold { background: var(--pyrite); color: var(--lapis-deep); font-weight: 600; }
-.btn-gold:hover { background: var(--pyrite-light); color: var(--lapis-deep); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--ink); }
+
+/* Lien "texte + flèche", sans cadre : utilisé dans les listes */
+.link-arrow {
+  display: inline-flex; align-items: center; min-height: 44px; gap: 0.4em;
+  color: var(--ink); text-decoration: none; font-size: 15px;
+  border-bottom: 1px solid transparent; transition: border-color 0.2s, color 0.2s;
+}
+.link-arrow:hover { color: var(--accent-strong); border-bottom-color: currentColor; }
+
+/* La petite flèche des liens externes, avec un espace avant */
+.ext { margin-left: 0.4em; }
 
 /* Texte réservé aux lecteurs d'écran (invisible à l'œil, lu à voix haute) */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* --------------------------------------------------------------------------
+   4. TEXTE LONG ("prose") : les pages de projets écrites en Markdown
+   Le Markdown devient du HTML brut (h2, p, ul, table...) : on le stylise ici.
+   -------------------------------------------------------------------------- */
+.prose { color: #c9cfdc; font-size: 17px; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { font-size: 32px; color: var(--ink); margin-top: 2em; }
+.prose h3 { font-size: 24px; color: var(--ink); margin-top: 1.6em; }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li + li { margin-top: 0.4em; }
+.prose li::marker { color: var(--accent); }
+.prose code { font-family: var(--font-mono); font-size: 0.82em; color: var(--accent-strong); background: rgba(159, 185, 255, 0.08); padding: 2px 6px; border-radius: 2px; }
+.prose table { width: 100%; border-collapse: collapse; font-size: 15px; display: block; overflow-x: auto; }
+.prose th, .prose td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.prose th { color: var(--ink); font-weight: 600; }

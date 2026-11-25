@@ -3,7 +3,7 @@
    --------------------------------------------------------------------------
    Un <canvas> fixe derrière toute la page. On y dessine :
      - des gemmes et des minéraux bruts en 3D (notre shader), qui flottent ;
-     - des pastilles dorées : éléments chimiques (Cr, Fe, Ti, C) et
+     - des pastilles : éléments chimiques (Cr, Fe, Ti, C) et
        conditions physiques (chaleur, pression) ;
      - de la poussière scintillante.
    À la souris, on peut tout déplacer. Lâcher un ingrédient sur un minéral
@@ -119,7 +119,7 @@ export async function initGemScene(canvas: HTMLCanvasElement, tooltip: HTMLEleme
   });
   scene.add(new THREE.Points(dustGeo, dustMat));
 
-  /* ---- 5. Les pastilles dorées des éléments ----
+  /* ---- 5. Les pastilles des éléments ----
      On dessine le symbole sur un petit <canvas> 2D, qui devient une texture.
      Un "Sprite" est une image plate toujours tournée vers la caméra. */
   const elementTextures = new Map<string, THREE.Texture>();
@@ -129,13 +129,13 @@ export async function initGemScene(canvas: HTMLCanvasElement, tooltip: HTMLEleme
     c.width = c.height = size;
     const g = c.getContext('2d')!;
     const glow = g.createRadialGradient(size / 2, size / 2, size * 0.2, size / 2, size / 2, size / 2);
-    glow.addColorStop(0, 'rgba(201,165,74,0.25)');
-    glow.addColorStop(1, 'rgba(201,165,74,0)');
-    g.fillStyle = glow; g.fillRect(0, 0, size, size);                       // halo doré
+    glow.addColorStop(0, 'rgba(159,185,255,0.22)');
+    glow.addColorStop(1, 'rgba(159,185,255,0)');
+    g.fillStyle = glow; g.fillRect(0, 0, size, size);                       // halo bleuté
     g.beginPath(); g.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2);
     g.fillStyle = 'rgba(14,17,26,0.85)'; g.fill();
-    g.lineWidth = 5; g.strokeStyle = '#c9a54a'; g.stroke();                 // anneau doré
-    g.fillStyle = '#e6c773'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.lineWidth = 4; g.strokeStyle = '#9fb9ff'; g.stroke();                 // anneau bleu glacier
+    g.fillStyle = '#e9eeff'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.font = `400 ${symbol.length > 1 ? 62 : 72}px "Martian Mono", monospace`;
     g.fillText(symbol, size / 2, size / 2 + 4);                             // le symbole
     const tex = new THREE.CanvasTexture(c);
@@ -303,7 +303,7 @@ export async function initGemScene(canvas: HTMLCanvasElement, tooltip: HTMLEleme
     burst(where);
   }
 
-  // Une gerbe d'étincelles dorées qui s'écartent puis s'éteignent
+  // Une gerbe d'étincelles qui s'écartent puis s'éteignent
   function burst(at: THREE.Vector3) {
     if (reduceMotion) return;
     const n = 40, pos = new Float32Array(n * 3), vel = new Float32Array(n * 3);
@@ -315,7 +315,7 @@ export async function initGemScene(canvas: HTMLCanvasElement, tooltip: HTMLEleme
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     const points = new THREE.Points(geo, new THREE.PointsMaterial({
-      color: '#e6c773', size: 0.05, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      color: '#cfdcff', size: 0.05, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     }));
     scene.add(points);
     bursts.push({ points, age: 0, vel });

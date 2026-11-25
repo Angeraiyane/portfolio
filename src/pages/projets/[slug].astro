@@ -1,0 +1,16 @@
+---
+/* [slug].astro : les crochets veulent dire "page dynamique".
+   getStaticPaths() dit à Astro quelles pages fabriquer au build :
+   une par projet vedette en français (/projets/lapisflow-ai, ...). */
+import { getCollection } from 'astro:content';
+import ProjectPage from '../../components/ProjectPage.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (p) => p.data.lang === 'fr' && p.data.featured);
+  return projects.map((entry) => ({ params: { slug: entry.data.page }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<ProjectPage entry={entry} />

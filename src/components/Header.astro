@@ -4,16 +4,22 @@
    on ajoute une ligne ici, pas du HTML. */
 import { useTranslations, localePath, languages, type Lang } from '../i18n/ui';
 
-interface Props { lang: Lang }
+interface Props {
+  lang: Lang;
+  alternates?: { fr: string; en: string };   // pour que FR/EN mène à la même page dans l'autre langue
+}
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const alternates = Astro.props.alternates ?? { fr: localePath('fr'), en: localePath('en') };
 
+// Les ancres pointent vers l'accueil : elles marchent aussi depuis la page d'un projet
+const home = localePath(lang);
 const links = [
-  { href: '#apropos', label: t('nav.about') },
-  { href: '#projets', label: t('nav.projects') },
-  { href: '#experience', label: t('nav.experience') },
-  { href: '#competences', label: t('nav.skills') },
-  { href: '#contact', label: t('nav.contact') },
+  { href: `${home}#apropos`, label: t('nav.about') },
+  { href: `${home}#projets`, label: t('nav.projects') },
+  { href: `${home}#experience`, label: t('nav.experience') },
+  { href: `${home}#competences`, label: t('nav.skills') },
+  { href: `${home}#contact`, label: t('nav.contact') },
 ];
 
 // Object.keys(languages) = ['fr', 'en'] : un bouton par langue
@@ -21,13 +27,13 @@ const langs = Object.keys(languages) as Lang[];
 ---
 
 <header class="header container">
-  <a href="#accueil" class="logo" aria-label={t('nav.home')}>
-    <!-- Notre gemme emblème en SVG : un lapis avec deux paillettes de pyrite -->
+  <a href={`${home}#accueil`} class="logo" aria-label={t('nav.home')}>
+    <!-- Notre gemme emblème en SVG : un lapis avec deux éclats de lumière -->
     <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true">
       <polygon points="50,4 92,30 80,86 20,86 8,30" fill="var(--lapis)" />
       <polygon points="50,22 72,34 66,64 34,64 28,34" fill="var(--lapis-light)" />
-      <circle cx="40" cy="44" r="3" fill="var(--pyrite)" />
-      <circle cx="60" cy="56" r="2" fill="var(--pyrite)" />
+      <circle cx="40" cy="44" r="3" fill="#e9eeff" />
+      <circle cx="60" cy="56" r="2" fill="#e9eeff" />
     </svg>
     <span>A·R·E</span>
   </a>
@@ -43,7 +49,7 @@ const langs = Object.keys(languages) as Lang[];
   <div class="lang" role="group" aria-label={t('lang.switch')}>
     {langs.map((code) => (
       <a
-        href={localePath(code)}
+        href={alternates[code]}
         hreflang={code}
         lang={code}
         aria-label={languages[code]}
@@ -72,7 +78,7 @@ const langs = Object.keys(languages) as Lang[];
   .lang { display: flex; gap: 4px; font-family: var(--font-mono); font-size: 12px; }
   .lang a {
     display: grid; place-items: center; min-width: 44px; min-height: 36px;
-    border: 1px solid var(--line); border-radius: 6px; color: var(--muted); text-decoration: none;
+    border: 1px solid var(--line); border-radius: 2px; color: var(--muted); text-decoration: none;
   }
   .lang a[aria-current='true'] { background: var(--lapis); border-color: var(--lapis); color: #fff; }
 </style>

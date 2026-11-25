@@ -1,0 +1,157 @@
+---
+/* ProjectsSection.astro — la section Projets de l'accueil.
+   ----------------------------------------------------------------------------
+   getCollection() lit les fichiers Markdown de src/content/projects/ au moment
+   du build. On garde ceux de la bonne langue, triés par "order", puis on les
+   sépare : les vedettes (grandes lignes) et les autres (liste compacte).
+
+   Style : une mise en page "éditoriale", comme un catalogue de joaillier.
+   Pas de cartes encadrées : des lignes séparées par un filet, et chaque projet
+   prend la couleur de SA gemme (style="--gem: ...", voir plus bas). */
+import { getCollection } from 'astro:content';
+import { useTranslations, projectPath, type Lang } from '../i18n/ui';
+import GemMark from './GemMark.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const all = (await getCollection('projects', (p) => p.data.lang === lang))
+  .sort((a, b) => a.data.order - b.data.order);
+const featured = all.filter((p) => p.data.featured);
+const others = all.filter((p) => !p.data.featured);
+---
+
+<section id="projets" class="section projects" data-gem="lapis">
+  <div class="container">
+    <h2 class="section-title">{t('nav.projects')}</h2>
+
+    <ol class="featured">
+      {featured.map(({ data }) => (
+        /* --gem : une variable CSS propre à CETTE ligne. Tout ce qui utilise var(--gem)
+           à l'intérieur prend la couleur de la gemme du projet. */
+        <li class="row" style={`--gem: var(--glow-${data.gem})`}>
+          <div class="meta">
+            <GemMark gem={data.gem} />
+            <span class="mono kicker">{data.kicker}</span>
+          </div>
+
+          <div class="body">
+            <h3>
+              <a href={projectPath(lang, data.page)}>{data.title}</a>
+              {data.plane && (
+                /* Le petit avion : il traverse de droite à gauche, nez en avant */
+                <span class="plane" aria-hidden="true">
+                  <svg width="30" height="18" viewBox="0 0 34 20">
+                    <path d="M2 11 L14 9 L22 1 L25 1 L20 9 L30 8 L33 10 L30 12 L20 11 L25 19 L22 19 L14 11 Z"
+                      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              )}
+            </h3>
+            <p class="summary">{data.summary}</p>
+            <p class="mono tags">{data.tags.join('  /  ')}</p>
+          </div>
+
+          <div class="side">
+            <p class="metric">{data.badge}</p>
+            <div class="links">
+              <a class="link-arrow" href={projectPath(lang, data.page)}>
+                {data.github ? t('projects.read') : t('projects.readCase')} <span aria-hidden="true">→</span>
+              </a>
+              {data.github && (
+                <a class="link-arrow" href={data.github} target="_blank" rel="noopener">
+                  GitHub <span aria-hidden="true">↗</span><span class="sr-only">{t('projects.newtab')}</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <h3 class="others-title mono">{t('projects.others')}</h3>
+    <ul class="others">
+      {others.map(({ data }) => (
+        <li style={`--gem: var(--glow-${data.gem})`}>
+          {data.github ? (
+            <a class="other" href={data.github} target="_blank" rel="noopener">
+              <span class="o-title">{data.title}</span>
+              <span class="o-summary">{data.summary}</span>
+              <span class="mono o-badge">{data.badge}</span>
+              <span class="mono o-link">GitHub ↗<span class="sr-only"> {t('projects.newtab')}</span></span>
+            </a>
+          ) : (
+            <div class="other">
+              <span class="o-title">{data.title}</span>
+              <span class="o-summary">{data.summary}</span>
+              <span class="mono o-badge">{data.badge}</span>
+              <span class="o-link"></span>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* La salle "lapis-lazuli" : un bleu profond qui monte doucement depuis le noir */
+  .projects { background: linear-gradient(180deg, transparent 0%, #081129 14%, var(--lapis-deep) 100%); }
+
+  ol, ul { list-style: none; margin: 0; padding: 0; }
+
+  /* ---- Les projets vedettes : 3 colonnes (repère | texte | chiffre + liens) ---- */
+  .featured { border-top: 1px solid #22305a; }
+  .row {
+    display: grid; grid-template-columns: 200px minmax(0, 1fr) 230px; gap: 32px;
+    padding: 40px 0; border-bottom: 1px solid #22305a;
+    transition: background 0.3s;
+  }
+  .row:hover { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent); }
+  .meta { display: flex; flex-direction: column; gap: 14px; padding-top: 10px; }
+  .kicker { color: #7f8fb8; font-size: 11px; }
+  h3 { font-size: clamp(32px, 4vw, 44px); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  h3 a { color: var(--ink); text-decoration: none; transition: color 0.25s; }
+  .row:hover h3 a, h3 a:focus-visible { color: var(--gem); }
+  .summary { color: #b7bfd1; font-size: 16px; margin-top: 12px; max-width: 60ch; }
+  .tags { color: #7f8fb8; font-size: 11px; margin-top: 16px; }
+  .side { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
+  .metric { font-family: var(--font-display); font-size: 26px; line-height: 1.15; color: var(--gem); }
+  .links { display: flex; flex-direction: column; align-items: flex-start; }
+
+  /* Le petit avion : nez à gauche, il vole donc de droite à gauche */
+  .plane { position: relative; width: 120px; height: 20px; overflow: hidden; display: inline-block; color: var(--gem); }
+  .plane svg { position: absolute; top: 1px; left: 0; animation: fly 4.5s linear infinite; }
+  @keyframes fly {
+    0% { transform: translateX(124px) translateY(2px); opacity: 0; }
+    15% { opacity: 1; }
+    50% { transform: translateX(45px) translateY(-1px); }
+    85% { opacity: 1; }
+    100% { transform: translateX(-34px) translateY(2px); opacity: 0; }
+  }
+
+  /* ---- Les autres projets : une liste compacte, une ligne par projet ---- */
+  .others-title { font-size: 11px; color: #7f8fb8; letter-spacing: 0.12em; text-transform: uppercase; margin: 72px 0 8px; font-family: var(--font-mono); }
+  .others { border-top: 1px solid #22305a; }
+  .other {
+    display: grid; grid-template-columns: 260px minmax(0, 1fr) 110px 80px; gap: 24px; align-items: baseline;
+    padding: 20px 0; border-bottom: 1px solid #22305a; color: var(--ink); text-decoration: none;
+  }
+  a.other:hover .o-title { color: var(--gem); }
+  .o-title { font-weight: 600; font-size: 17px; transition: color 0.25s; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+  .o-summary { color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .o-badge { font-size: 11px; color: var(--gem); }
+  .o-link { font-size: 11px; color: var(--muted); text-align: right; }
+
+  /* ---- Écrans moyens et téléphones : on empile ---- */
+  @media (max-width: 900px) {
+    .row { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .meta { flex-direction: row; align-items: center; padding-top: 0; }
+    .side { flex-direction: row; flex-wrap: wrap; align-items: center; }
+    .links { flex-direction: row; gap: 20px; }
+    .other { grid-template-columns: minmax(0, 1fr) auto; }
+    .o-summary { grid-column: 1 / -1; grid-row: 2; }
+    .o-link { display: none; }
+  }
+</style>

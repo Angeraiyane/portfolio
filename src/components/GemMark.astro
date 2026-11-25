@@ -1,0 +1,12 @@
+---
+/* GemMark.astro — une petite pierre taillée en SVG, dans la couleur d'une gemme.
+   Sert de repère visuel à chaque projet (à la place d'une étiquette ou d'un numéro). */
+interface Props { gem: string; size?: number }
+const { gem, size = 22 } = Astro.props;
+---
+
+<svg class="gem-mark" width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" style={`--c: var(--glow-${gem})`}>
+  <polygon points="50,4 92,30 80,86 20,86 8,30" fill="var(--c)" opacity="0.55" />
+  <polygon points="50,22 72,34 66,64 34,64 28,34" fill="var(--c)" />
+  <polygon points="50,4 50,22 28,34 8,30" fill="#fff" opacity="0.35" />
+</svg>

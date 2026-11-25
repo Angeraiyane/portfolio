@@ -8,6 +8,7 @@ import Hero from './Hero.astro';
 import DelphiBand from './DelphiBand.astro';
 import LangSuggest from './LangSuggest.astro';
 import GemScene from './GemScene.astro';
+import ProjectsSection from './ProjectsSection.astro';
 import { useTranslations, type Lang, type UIKey } from '../i18n/ui';
 
 interface Props { lang: Lang }
@@ -18,7 +19,6 @@ const t = useTranslations(lang);
 // quelle ambiance de gemme afficher quand on arrive sur la section.
 const sections: { id: string; title: UIKey; gem: string }[] = [
   { id: 'apropos', title: 'nav.about', gem: 'quartz-rose' },
-  { id: 'projets', title: 'nav.projects', gem: 'lapis' },
   { id: 'experience', title: 'nav.experience', gem: 'emerald' },
   { id: 'competences', title: 'nav.skills', gem: 'amethyst' },
   { id: 'contact', title: 'nav.contact', gem: 'ruby' },
@@ -32,7 +32,19 @@ const sections: { id: string; title: UIKey; gem: string }[] = [
     <Hero lang={lang} />
     <DelphiBand lang={lang} />
 
-    {sections.map((s) => (
+    {sections.slice(0, 1).map((s) => (
+      <section id={s.id} class="section" data-gem={s.gem}>
+        <div class="container">
+          <h2 class="section-title">{t(s.title)}</h2>
+          <p class="placeholder">{t('section.wip')}</p>
+        </div>
+      </section>
+    ))}
+
+    <!-- Projets : une vraie section, avec ses cartes (voir ProjectsSection.astro) -->
+    <ProjectsSection lang={lang} />
+
+    {sections.slice(1).map((s) => (
       <section id={s.id} class="section" data-gem={s.gem}>
         <div class="container">
           <h2 class="section-title">{t(s.title)}</h2>

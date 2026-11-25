@@ -15,7 +15,7 @@ const DELPHI_CALL_URL = `${DELPHI_URL}/call`;                        // appel vo
   <div class="band">
     <div class="text">
       <div class="icon" aria-hidden="true">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--pyrite-light)" stroke-width="1.6" stroke-linecap="round">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round">
           <path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4" />
         </svg>
       </div>
@@ -28,7 +28,7 @@ const DELPHI_CALL_URL = `${DELPHI_URL}/call`;                        // appel vo
     <div class="side">
       <div class="actions">
         <!-- target="_blank" ouvre un nouvel onglet ; rel="noopener" est une protection de sécurité -->
-        <a class="btn btn-gold" href={DELPHI_URL} target="_blank" rel="noopener">
+        <a class="btn btn-primary" href={DELPHI_URL} target="_blank" rel="noopener">
           {t('delphi.chat')} <span class="ext" aria-hidden="true">↗</span>
           <span class="sr-only">{t('delphi.newtab')}</span>
         </a>
@@ -48,15 +48,16 @@ const DELPHI_CALL_URL = `${DELPHI_URL}/call`;                        // appel vo
 </section>
 
 <style>
+  /* Un bandeau ouvert, délimité par deux filets, plutôt qu'une "carte" encadrée */
   .band {
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;
-    padding: 28px 32px; border: 1px solid #243564; border-radius: 18px; background: rgba(12, 22, 48, 0.6);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px 48px;
+    padding: 36px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   }
-  .text { display: flex; gap: 18px; align-items: center; flex: 1 1 460px; }
-  .icon { flex: none; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--pyrite); display: grid; place-items: center; }
-  h2 { font-size: 30px; margin-bottom: 6px; }
-  .text p { color: #b7bfd1; font-size: 15px; }
-  .side { display: flex; flex-direction: column; gap: 10px; flex: 0 1 340px; }
+  .text { display: flex; gap: 22px; align-items: flex-start; flex: 1 1 460px; }
+  .icon { flex: none; padding-top: 6px; }
+  h2 { font-size: clamp(30px, 3.4vw, 40px); margin-bottom: 8px; }
+  .text p { color: #b7bfd1; font-size: 16px; max-width: 52ch; }
+  .side { display: flex; flex-direction: column; gap: 12px; flex: 0 1 340px; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; }
   .ext { margin-left: 6px; font-size: 0.9em; }
   .leaving { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.45; }

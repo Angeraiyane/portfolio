@@ -1,0 +1,15 @@
+---
+/* Même principe que src/pages/projets/[slug].astro, pour l'anglais :
+   /en/projects/lapisflow-ai, ... */
+import { getCollection } from 'astro:content';
+import ProjectPage from '../../../components/ProjectPage.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (p) => p.data.lang === 'en' && p.data.featured);
+  return projects.map((entry) => ({ params: { slug: entry.data.page }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<ProjectPage entry={entry} />

@@ -20,7 +20,7 @@ const t = useTranslations(other);
 <!-- hidden = invisible par défaut ; le script l'affiche seulement si c'est utile -->
 <div class="suggest" data-lang-suggest data-page-lang={lang} data-other-lang={other} lang={other} hidden>
   <p>{t('suggest.text')}</p>
-  <a class="btn btn-gold" href={localePath(other)} data-lang-choice={other}>{t('suggest.action')}</a>
+  <a class="btn btn-primary" href={localePath(other)} data-lang-choice={other}>{t('suggest.action')}</a>
   <button type="button" class="close" aria-label={t('suggest.close')}>×</button>
 </div>
 
@@ -29,14 +29,14 @@ const t = useTranslations(other);
     position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 10;
     display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
     width: min(560px, calc(100% - 32px)); padding: 14px 18px;
-    background: rgba(14, 17, 26, 0.96); border: 1px solid #3a4258; border-radius: 14px;
+    background: rgba(14, 17, 26, 0.96); border: 1px solid #3a4258; border-radius: 2px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   }
   .suggest[hidden] { display: none; }
   p { flex: 1 1 200px; font-size: 15px; }
   .btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
   .close {
-    width: 44px; height: 44px; border: 0; border-radius: 8px; background: transparent;
+    width: 44px; height: 44px; border: 0; border-radius: 2px; background: transparent;
     color: var(--muted); font-size: 24px; cursor: pointer;
   }
   .close:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }

@@ -27,12 +27,12 @@ const { lang } = Astro.props;
     position: fixed; z-index: 3; pointer-events: none;
     transform: translate(24px, -50%);       /* à droite de la pierre, centré verticalement */
     display: flex; flex-direction: column; gap: 2px;
-    padding: 8px 12px; border-radius: 10px;
+    padding: 8px 12px; border-radius: 2px;
     background: rgba(14, 17, 26, 0.92); border: 1px solid #3a4258;
   }
   .gem-tip[hidden] { display: none; }
   .name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
-  .formula { font-family: var(--font-mono); font-size: 12px; color: var(--pyrite-light); }
+  .formula { font-family: var(--font-mono); font-size: 12px; color: var(--accent-strong); }
   .recipe { font-size: 12px; color: var(--muted); }
   .recipe[hidden] { display: none; }
 </style>

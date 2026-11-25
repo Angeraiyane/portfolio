@@ -10,4 +10,8 @@ export default defineConfig({
     locales: ['fr', 'en'],
     routing: { prefixDefaultLocale: false },   // pas de "/fr/" : le français reste à la racine
   },
+  vite: {
+    // Three.js est volontairement chargé à part et à la demande : on relève le seuil d'avertissement
+    build: { chunkSizeWarningLimit: 700 },
+  },
 });

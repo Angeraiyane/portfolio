@@ -31,7 +31,7 @@ export const ui = {
     'hero.cta.projects': 'Voir mes projets',
     'hero.cta.cv': 'Télécharger le CV',
     'hero.availability': 'Stage PFE recherché · 6 mois · dès janvier 2027',
-    'hero.hint': 'Astuce : glisse une pastille dorée sur une pierre brute. Le chrome sur le corindon, par exemple.',
+    'hero.hint': 'Astuce : glisse une pastille (Cr, Fe…) sur une pierre brute. Le chrome sur le corindon, par exemple.',
 
     'delphi.title': 'Parle à mon double IA',
     'delphi.text':
@@ -42,6 +42,14 @@ export const ui = {
     'delphi.newtab': '(ouvre Delphi dans un nouvel onglet)',
 
     'section.wip': 'Section en construction.',
+
+    'projects.read': 'Lire le projet',
+    'projects.readCase': "Lire l'étude de cas",
+    'projects.github': 'GitHub',
+    'projects.others': 'Autres projets',
+    'projects.back': 'Retour aux projets',
+    'projects.viewCode': 'Voir le code sur GitHub',
+    'projects.newtab': '(ouvre GitHub dans un nouvel onglet)',
 
     'suggest.text': 'Ce site existe aussi en français.',
     'suggest.action': 'Passer en français',
@@ -67,7 +75,7 @@ export const ui = {
     'hero.cta.projects': 'See my projects',
     'hero.cta.cv': 'Download my CV',
     'hero.availability': 'Looking for a 6-month end-of-studies internship · from January 2027',
-    'hero.hint': 'Tip: drag a golden token onto a raw stone. Try chromium on corundum.',
+    'hero.hint': 'Tip: drag a token (Cr, Fe…) onto a raw stone. Try chromium on corundum.',
 
     'delphi.title': 'Talk to my AI twin',
     'delphi.text':
@@ -78,6 +86,14 @@ export const ui = {
     'delphi.newtab': '(opens Delphi in a new tab)',
 
     'section.wip': 'Section under construction.',
+
+    'projects.read': 'Read the project',
+    'projects.readCase': 'Read the case study',
+    'projects.github': 'GitHub',
+    'projects.others': 'Other projects',
+    'projects.back': 'Back to projects',
+    'projects.viewCode': 'View the code on GitHub',
+    'projects.newtab': '(opens GitHub in a new tab)',
 
     'suggest.text': 'This site is also available in English.',
     'suggest.action': 'Switch to English',
@@ -95,4 +111,9 @@ export function useTranslations(lang: Lang) {
 /** L'adresse d'une page dans une langue donnée : '/' en français, '/en/' en anglais. */
 export function localePath(lang: Lang, path = '/') {
   return lang === defaultLang ? path : `/${lang}${path}`;
+}
+
+/** L'adresse de la page d'un projet : /projets/<slug> en français, /en/projects/<slug> en anglais. */
+export function projectPath(lang: Lang, slug: string) {
+  return lang === 'fr' ? `/projets/${slug}` : `/en/projects/${slug}`;
 }
