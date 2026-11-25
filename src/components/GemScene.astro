@@ -1,0 +1,60 @@
+---
+/* GemScene.astro — le canvas 3D derrière la page + l'étiquette de survol.
+   Three.js pèse lourd : on le charge APRÈS le reste de la page, pour que
+   ton nom et ton texte s'affichent tout de suite, même sur une connexion lente. */
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+
+<!-- aria-hidden : décoratif, les lecteurs d'écran l'ignorent -->
+<canvas class="gem-canvas" aria-hidden="true" data-lang={lang}></canvas>
+
+<div class="gem-tip" hidden aria-hidden="true">
+  <span class="name" data-name></span>
+  <span class="formula" data-formula></span>
+  <span class="recipe" data-recipe hidden></span>
+</div>
+
+<style>
+  .gem-canvas {
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;      /* les clics traversent le canvas */
+    opacity: 0; transition: opacity 0.6s;
+  }
+  .gem-tip {
+    position: fixed; z-index: 3; pointer-events: none;
+    transform: translate(24px, -50%);       /* à droite de la pierre, centré verticalement */
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 12px; border-radius: 10px;
+    background: rgba(14, 17, 26, 0.92); border: 1px solid #3a4258;
+  }
+  .gem-tip[hidden] { display: none; }
+  .name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+  .formula { font-family: var(--font-mono); font-size: 12px; color: var(--pyrite-light); }
+  .recipe { font-size: 12px; color: var(--muted); }
+  .recipe[hidden] { display: none; }
+</style>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('.gem-canvas');
+  const tip = document.querySelector<HTMLElement>('.gem-tip');
+
+  // La carte graphique est-elle disponible ? Sinon, on garde simplement le fond noir.
+  const webglOK = (() => {
+    try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
+  })();
+
+  function start() {
+    if (!canvas || !tip || !webglOK) return;
+    // import() "dynamique" : Three.js est téléchargé seulement à ce moment-là, dans un fichier à part.
+    import('../scripts/gem-scene').then(({ initGemScene }) => {
+      initGemScene(canvas, tip, (canvas.dataset.lang as 'fr' | 'en') ?? 'fr');
+    });
+  }
+
+  // On attend que le navigateur soit libre (texte affiché) avant de lancer la 3D.
+  if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 1500 });
+  else setTimeout(start, 300);
+</script>

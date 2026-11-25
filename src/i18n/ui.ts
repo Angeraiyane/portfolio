@@ -31,6 +31,7 @@ export const ui = {
     'hero.cta.projects': 'Voir mes projets',
     'hero.cta.cv': 'Télécharger le CV',
     'hero.availability': 'Stage PFE recherché · 6 mois · dès janvier 2027',
+    'hero.hint': 'Astuce : glisse une pastille dorée sur une pierre brute. Le chrome sur le corindon, par exemple.',
 
     'delphi.title': 'Parle à mon double IA',
     'delphi.text':
@@ -66,6 +67,7 @@ export const ui = {
     'hero.cta.projects': 'See my projects',
     'hero.cta.cv': 'Download my CV',
     'hero.availability': 'Looking for a 6-month end-of-studies internship · from January 2027',
+    'hero.hint': 'Tip: drag a golden token onto a raw stone. Try chromium on corundum.',
 
     'delphi.title': 'Talk to my AI twin',
     'delphi.text':

@@ -7,7 +7,8 @@ import { useTranslations, type Lang } from '../i18n/ui';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';
+const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';   // discussion écrite
+const DELPHI_CALL_URL = `${DELPHI_URL}/call`;                        // appel vocal
 ---
 
 <section class="container" aria-labelledby="delphi-title">
@@ -31,7 +32,7 @@ const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';
           {t('delphi.chat')} <span class="ext" aria-hidden="true">↗</span>
           <span class="sr-only">{t('delphi.newtab')}</span>
         </a>
-        <a class="btn btn-ghost" href={DELPHI_URL} target="_blank" rel="noopener">
+        <a class="btn btn-ghost" href={DELPHI_CALL_URL} target="_blank" rel="noopener">
           {t('delphi.call')} <span class="ext" aria-hidden="true">↗</span>
           <span class="sr-only">{t('delphi.newtab')}</span>
         </a>
