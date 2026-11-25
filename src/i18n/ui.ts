@@ -41,7 +41,17 @@ export const ui = {
     'delphi.leaving': 'Tu vas quitter ce site : la conversation se passe sur Delphi, dans un nouvel onglet.',
     'delphi.newtab': '(ouvre Delphi dans un nouvel onglet)',
 
-    'section.wip': 'Section en construction.',
+
+    'about.education': 'Formation',
+    'about.distinctions': 'Distinctions',
+    'about.languages': 'Langues',
+    'contact.title': 'Travaillons ensemble',
+    'contact.text': 'Je cherche un stage de fin d’études de 6 mois en Data / IA, à partir de janvier 2027, sur place, en hybride ou à distance. Le plus simple : un e-mail.',
+    'contact.copy': 'Copier l’adresse',
+    'contact.copied': 'Adresse copiée',
+    'contact.elsewhere': 'Ailleurs',
+    'footer.built': 'Conçu et codé avec Astro et Three.js.',
+    'footer.top': 'Revenir en haut',
 
     'projects.read': 'Lire le projet',
     'projects.readCase': "Lire l'étude de cas",
@@ -85,7 +95,17 @@ export const ui = {
     'delphi.leaving': "You'll leave this site: the conversation happens on Delphi, in a new tab.",
     'delphi.newtab': '(opens Delphi in a new tab)',
 
-    'section.wip': 'Section under construction.',
+
+    'about.education': 'Education',
+    'about.distinctions': 'Awards',
+    'about.languages': 'Languages',
+    'contact.title': "Let's work together",
+    'contact.text': "I'm looking for a 6-month end-of-studies internship in Data / AI, from January 2027, on-site, hybrid or remote. The easiest way: an email.",
+    'contact.copy': 'Copy address',
+    'contact.copied': 'Address copied',
+    'contact.elsewhere': 'Elsewhere',
+    'footer.built': 'Designed and coded with Astro and Three.js.',
+    'footer.top': 'Back to top',
 
     'projects.read': 'Read the project',
     'projects.readCase': 'Read the case study',

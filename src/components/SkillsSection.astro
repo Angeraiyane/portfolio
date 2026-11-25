@@ -1,0 +1,38 @@
+---
+/* SkillsSection.astro — Compétences (salle améthyste). Données : src/data/profile.ts */
+import { skills } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+import GemMark from './GemMark.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+// Un élément est soit un texte simple, soit { fr, en } : on choisit la bonne langue
+const label = (item: string | Record<Lang, string>) => (typeof item === 'string' ? item : item[lang]);
+---
+
+<section id="competences" class="section room" style="--gem: var(--glow-amethyst)">
+  <div class="container">
+    <div class="room-head">
+      <GemMark gem="amethyst" size={26} />
+      <h2 class="section-title">{t('nav.skills')}</h2>
+    </div>
+
+    <div class="groups">
+      {skills.map((g) => (
+        <div class="group">
+          <h3 class="label">{g.group[lang]}</h3>
+          <ul>{g.items.map((item) => <li>{label(item)}</li>)}</ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 40px 32px; }
+  .group { border-top: 1px solid var(--gem); padding-top: 18px; }
+  h3 { margin: 0 0 16px; color: var(--gem); }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  li { color: #c9cfdc; font-size: 16px; }
+</style>

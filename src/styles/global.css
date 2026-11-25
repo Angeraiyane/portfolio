@@ -135,3 +135,19 @@ a:hover { color: var(--accent-strong); }
 .prose table { width: 100%; border-collapse: collapse; font-size: 15px; display: block; overflow-x: auto; }
 .prose th, .prose td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 .prose th { color: var(--ink); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   5. LES "SALLES" : chaque section baigne dans la lueur de sa gemme
+   On donne --gem à la section (style="--gem: var(--glow-emerald)") et le
+   pseudo-élément ::before dessine une lueur très douce en haut à gauche.
+   color-mix() mélange deux couleurs : ici 9 % de la gemme dans du transparent.
+   -------------------------------------------------------------------------- */
+.room { position: relative; isolation: isolate; }
+.room::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(70% 55% at 0% 0%, color-mix(in srgb, var(--gem) 9%, transparent), transparent 70%);
+}
+.room-head { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; }
+.room-head .section-title { margin: 0; }
+.label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #7f8a9e; }
+.hairline { border-top: 1px solid var(--line); }

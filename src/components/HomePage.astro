@@ -8,21 +8,16 @@ import Hero from './Hero.astro';
 import DelphiBand from './DelphiBand.astro';
 import LangSuggest from './LangSuggest.astro';
 import GemScene from './GemScene.astro';
+import AboutSection from './AboutSection.astro';
 import ProjectsSection from './ProjectsSection.astro';
-import { useTranslations, type Lang, type UIKey } from '../i18n/ui';
+import ExperienceSection from './ExperienceSection.astro';
+import SkillsSection from './SkillsSection.astro';
+import ContactSection from './ContactSection.astro';
+import Footer from './Footer.astro';
+import type { Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const t = useTranslations(lang);
-
-// Les sections à venir. data-gem indiquera plus tard à la scène 3D
-// quelle ambiance de gemme afficher quand on arrive sur la section.
-const sections: { id: string; title: UIKey; gem: string }[] = [
-  { id: 'apropos', title: 'nav.about', gem: 'quartz-rose' },
-  { id: 'experience', title: 'nav.experience', gem: 'emerald' },
-  { id: 'competences', title: 'nav.skills', gem: 'amethyst' },
-  { id: 'contact', title: 'nav.contact', gem: 'ruby' },
-];
 ---
 
 <BaseLayout lang={lang}>
@@ -31,33 +26,17 @@ const sections: { id: string; title: UIKey; gem: string }[] = [
   <main>
     <Hero lang={lang} />
     <DelphiBand lang={lang} />
-
-    {sections.slice(0, 1).map((s) => (
-      <section id={s.id} class="section" data-gem={s.gem}>
-        <div class="container">
-          <h2 class="section-title">{t(s.title)}</h2>
-          <p class="placeholder">{t('section.wip')}</p>
-        </div>
-      </section>
-    ))}
-
-    <!-- Projets : une vraie section, avec ses cartes (voir ProjectsSection.astro) -->
+    <AboutSection lang={lang} />
     <ProjectsSection lang={lang} />
-
-    {sections.slice(1).map((s) => (
-      <section id={s.id} class="section" data-gem={s.gem}>
-        <div class="container">
-          <h2 class="section-title">{t(s.title)}</h2>
-          <p class="placeholder">{t('section.wip')}</p>
-        </div>
-      </section>
-    ))}
+    <ExperienceSection lang={lang} />
+    <SkillsSection lang={lang} />
+    <ContactSection lang={lang} />
   </main>
+  <Footer lang={lang} />
   <LangSuggest lang={lang} />
 </BaseLayout>
 
 <style>
   /* main passe au-dessus du canvas 3D (z-index 0) */
   main { position: relative; z-index: 1; }
-  .placeholder { color: var(--faint); }
 </style>

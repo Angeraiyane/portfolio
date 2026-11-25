@@ -1,0 +1,49 @@
+---
+/* ExperienceSection.astro — Expérience (salle émeraude). Données : src/data/profile.ts */
+import { experience } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+import GemMark from './GemMark.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id="experience" class="section room" style="--gem: var(--glow-emerald)">
+  <div class="container">
+    <div class="room-head">
+      <GemMark gem="emerald" size={26} />
+      <h2 class="section-title">{t('nav.experience')}</h2>
+    </div>
+
+    <ol class="jobs">
+      {experience.map((job) => (
+        <li class="job">
+          <p class="mono period">{job.period[lang]}</p>
+          <div>
+            <h3>{job.role[lang]}</h3>
+            <p class="company">{job.company}{job.context && <span> · {job.context[lang]}</span>}</p>
+            <ul class="points">
+              {job.points.map((p) => <li>{p[lang]}</li>)}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  ol, ul { list-style: none; margin: 0; padding: 0; }
+  .jobs { border-top: 1px solid var(--line); }
+  .job { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; padding: 36px 0; border-bottom: 1px solid var(--line); }
+  .period { font-size: 12px; color: var(--gem); padding-top: 10px; }
+  h3 { font-size: clamp(26px, 3vw, 34px); }
+  .company { color: var(--ink); margin-top: 6px; font-weight: 500; }
+  .company span { color: var(--muted); font-weight: 400; }
+  .points { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; max-width: 70ch; }
+  /* Une petite facette (losange) en guise de puce, dans la couleur de la gemme */
+  .points li { position: relative; padding-left: 22px; color: #b7bfd1; }
+  .points li::before { content: ''; position: absolute; left: 2px; top: 0.6em; width: 7px; height: 7px; background: var(--gem); transform: rotate(45deg); opacity: 0.8; }
+  @media (max-width: 760px) { .job { grid-template-columns: minmax(0, 1fr); gap: 8px; } .period { padding-top: 0; } }
+</style>

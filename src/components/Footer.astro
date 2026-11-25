@@ -1,0 +1,21 @@
+---
+/* Footer.astro — le pied de page. new Date().getFullYear() est calculé au build. */
+import { useTranslations, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="container footer">
+  <p>© {new Date().getFullYear()} Ange Raïyane ESSOAZINA</p>
+  <p class="built">{t('footer.built')}</p>
+  <a class="link-arrow" href="#">{t('footer.top')} <span aria-hidden="true">↑</span></a>
+</footer>
+
+<style>
+  .footer {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 32px;
+    padding-block: 32px 48px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted);
+    position: relative; z-index: 1;
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+/* ContactSection.astro — Contact (salle rubis).
+   Un formulaire demanderait un serveur pour envoyer les messages : un e-mail
+   bien visible + un bouton "copier" fait le même travail, sans rien à maintenir. */
+import { useTranslations, type Lang } from '../i18n/ui';
+import GemMark from './GemMark.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const EMAIL = 'angeraiyane@gmail.com';
+const links = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ange-raiyane-essoazina-08aa2333a/' },
+  { label: 'GitHub', href: 'https://github.com/Angeraiyane' },
+  { label: lang === 'fr' ? 'Mon double IA (Delphi)' : 'My AI twin (Delphi)', href: 'https://new.delphi.ai/ange-raiyane-essoazina' },
+];
+---
+
+<section id="contact" class="section room" style="--gem: var(--glow-ruby)">
+  <div class="container">
+    <div class="room-head">
+      <GemMark gem="ruby" size={26} />
+      <h2 class="section-title">{t('nav.contact')}</h2>
+    </div>
+
+    <p class="big">{t('contact.title')}</p>
+    <p class="text">{t('contact.text')}</p>
+
+    <div class="mail">
+      <a class="address" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+      <button type="button" class="btn btn-ghost copy" data-email={EMAIL} data-done={t('contact.copied')}>
+        {t('contact.copy')}
+      </button>
+    </div>
+
+    <h3 class="label">{t('contact.elsewhere')}</h3>
+    <ul class="links">
+      {links.map((l) => (
+        <li>
+          <a class="link-arrow" href={l.href} target="_blank" rel="noopener">
+            {l.label} <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .big { font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px); line-height: 1.05; }
+  .text { color: #b7bfd1; max-width: 58ch; margin-top: 20px; font-size: 18px; }
+  .mail { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin: 40px 0 56px; }
+  .address {
+    font-family: var(--font-display); font-size: clamp(24px, 3.4vw, 40px); color: var(--gem);
+    text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--gem) 40%, transparent);
+    overflow-wrap: anywhere;
+  }
+  .address:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .copy { cursor: pointer; background: transparent; }
+  h3 { margin: 0 0 8px; }
+  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 32px; }
+</style>
+
+<script>
+  // Bouton "Copier l'adresse" : copie dans le presse-papiers et confirme pendant 2 secondes
+  document.querySelectorAll<HTMLButtonElement>('.copy[data-email]').forEach((btn) => {
+    const original = btn.textContent;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.email ?? '');
+        btn.textContent = btn.dataset.done ?? 'OK';
+        setTimeout(() => (btn.textContent = original), 2000);
+      } catch {
+        /* presse-papiers refusé : l'adresse reste visible et sélectionnable */
+      }
+    });
+  });
+</script>

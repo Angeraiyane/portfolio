@@ -5,6 +5,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from './Header.astro';
 import GemMark from './GemMark.astro';
+import Footer from './Footer.astro';
 import { useTranslations, localePath, projectPath, type Lang } from '../i18n/ui';
 
 interface Props { entry: CollectionEntry<'projects'> }
@@ -46,6 +47,7 @@ const alternates = { fr: projectPath('fr', data.page), en: projectPath('en', dat
       </a>
     )}
   </main>
+  <Footer lang={lang} />
 </BaseLayout>
 
 <style>
