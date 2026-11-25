@@ -1,6 +1,12 @@
 ---
 /* DelphiBand.astro — le bandeau vers le double IA sur Delphi.
-   Simple lien : l'intégration en widget est payante. */
+   C'est un simple lien externe : on prévient clairement la personne
+   qu'elle quitte le site (texte visible + icône ↗ + précision pour lecteurs d'écran). */
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
 const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';
 ---
 
@@ -13,14 +19,29 @@ const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';
         </svg>
       </div>
       <div>
-        <h2 id="delphi-title">Parle à mon double IA</h2>
-        <p>Il a ma voix et connaît tous mes projets. Pose-lui tes questions, à l'écrit ou à l'oral, comme si tu me parlais.</p>
+        <h2 id="delphi-title">{t('delphi.title')}</h2>
+        <p>{t('delphi.text')}</p>
       </div>
     </div>
-    <div class="actions">
-      <!-- target="_blank" ouvre un nouvel onglet ; rel="noopener" est une protection de sécurité -->
-      <a class="btn btn-gold" href={DELPHI_URL} target="_blank" rel="noopener">Discuter</a>
-      <a class="btn btn-ghost" href={DELPHI_URL} target="_blank" rel="noopener">Appeler</a>
+
+    <div class="side">
+      <div class="actions">
+        <!-- target="_blank" ouvre un nouvel onglet ; rel="noopener" est une protection de sécurité -->
+        <a class="btn btn-gold" href={DELPHI_URL} target="_blank" rel="noopener">
+          {t('delphi.chat')} <span class="ext" aria-hidden="true">↗</span>
+          <span class="sr-only">{t('delphi.newtab')}</span>
+        </a>
+        <a class="btn btn-ghost" href={DELPHI_URL} target="_blank" rel="noopener">
+          {t('delphi.call')} <span class="ext" aria-hidden="true">↗</span>
+          <span class="sr-only">{t('delphi.newtab')}</span>
+        </a>
+      </div>
+      <p class="leaving">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+        </svg>
+        {t('delphi.leaving')}
+      </p>
     </div>
   </div>
 </section>
@@ -33,6 +54,10 @@ const DELPHI_URL = 'https://new.delphi.ai/ange-raiyane-essoazina';
   .text { display: flex; gap: 18px; align-items: center; flex: 1 1 460px; }
   .icon { flex: none; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--pyrite); display: grid; place-items: center; }
   h2 { font-size: 30px; margin-bottom: 6px; }
-  p { color: #b7bfd1; font-size: 15px; }
+  .text p { color: #b7bfd1; font-size: 15px; }
+  .side { display: flex; flex-direction: column; gap: 10px; flex: 0 1 340px; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .ext { margin-left: 6px; font-size: 0.9em; }
+  .leaving { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.45; }
+  .leaving svg { flex: none; margin-top: 3px; }
 </style>

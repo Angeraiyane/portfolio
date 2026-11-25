@@ -1,18 +1,27 @@
 ---
-/* Header.astro — logo, navigation et choix de langue.
-   Les liens de navigation sont générés depuis un tableau :
-   pour ajouter une section, on ajoute une ligne ici, pas du HTML. */
+/* Header.astro — logo, navigation et bascule FR / EN.
+   Les liens sont générés depuis un tableau : pour ajouter une section,
+   on ajoute une ligne ici, pas du HTML. */
+import { useTranslations, localePath, languages, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
 const links = [
-  { href: '#apropos', label: 'À propos' },
-  { href: '#projets', label: 'Projets' },
-  { href: '#experience', label: 'Expérience' },
-  { href: '#competences', label: 'Compétences' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#apropos', label: t('nav.about') },
+  { href: '#projets', label: t('nav.projects') },
+  { href: '#experience', label: t('nav.experience') },
+  { href: '#competences', label: t('nav.skills') },
+  { href: '#contact', label: t('nav.contact') },
 ];
+
+// Object.keys(languages) = ['fr', 'en'] : un bouton par langue
+const langs = Object.keys(languages) as Lang[];
 ---
 
 <header class="header container">
-  <a href="#accueil" class="logo" aria-label="Accueil">
+  <a href="#accueil" class="logo" aria-label={t('nav.home')}>
     <!-- Notre gemme emblème en SVG : un lapis avec deux paillettes de pyrite -->
     <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true">
       <polygon points="50,4 92,30 80,86 20,86 8,30" fill="var(--lapis)" />
@@ -23,7 +32,7 @@ const links = [
     <span>A·R·E</span>
   </a>
 
-  <nav aria-label="Navigation principale">
+  <nav aria-label={t('nav.main')}>
     <ul>
       {links.map((link) => (
         <li><a href={link.href}>{link.label}</a></li>
@@ -31,15 +40,25 @@ const links = [
     </ul>
   </nav>
 
-  <div class="lang" role="group" aria-label="Langue">
-    <a href="/" aria-current="true">FR</a>
-    <a href="/en/">EN</a>
+  <div class="lang" role="group" aria-label={t('lang.switch')}>
+    {langs.map((code) => (
+      <a
+        href={localePath(code)}
+        hreflang={code}
+        lang={code}
+        aria-label={languages[code]}
+        aria-current={code === lang ? 'true' : undefined}
+        data-lang-choice={code}
+      >
+        {code.toUpperCase()}
+      </a>
+    ))}
   </div>
 </header>
 
 <style>
   /* Dans un fichier .astro, ce <style> ne s'applique QU'À ce composant :
-     .logo ici ne touchera jamais un autre .logo ailleurs. On dit qu'il est "scopé". */
+     on dit qu'il est "scopé". */
   .header {
     display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
     gap: 16px 32px; padding-block: 24px;
@@ -57,3 +76,13 @@ const links = [
   }
   .lang a[aria-current='true'] { background: var(--lapis); border-color: var(--lapis); color: #fff; }
 </style>
+
+<script>
+  // Quand la personne choisit une langue, on s'en souvient (dans son navigateur uniquement)
+  // pour ne plus lui proposer l'autre langue.
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-choice]').forEach((a) => {
+    a.addEventListener('click', () => {
+      try { localStorage.setItem('lang-choice', a.dataset.langChoice ?? ''); } catch {}
+    });
+  });
+</script>

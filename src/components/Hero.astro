@@ -1,27 +1,30 @@
 ---
 /* Hero.astro — le haut de la page d'accueil.
    Plus tard, la scène 3D des gemmes viendra se placer derrière ce texte. */
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+// Un CV par langue, à déposer dans le dossier public/
+const cvFile = lang === 'fr' ? '/cv-ange-essoazina-fr.pdf' : '/cv-ange-essoazina-en.pdf';
 ---
 
 <section id="accueil" class="hero">
   <div class="container hero-inner">
     <!-- data-decrypt : notre script repère cet attribut pour lancer l'effet -->
-    <p class="mono kicker" data-decrypt="AI & DATA ENGINEER">AI &amp; DATA ENGINEER</p>
+    <p class="mono kicker" data-decrypt={t('hero.kicker')}>{t('hero.kicker')}</p>
 
     <h1>Ange Raïyane<br />ESSOAZINA</h1>
 
-    <p class="lead">
-      Étudiant en Master AI &amp; Data Computing. Je conçois des pipelines de données
-      temps réel, des modèles d'apprentissage et des agents IA, de la donnée brute
-      jusqu'à la décision.
-    </p>
+    <p class="lead">{t('hero.lead')}</p>
 
     <div class="actions">
-      <a class="btn btn-primary" href="#projets">Voir mes projets</a>
-      <a class="btn btn-ghost" href="/cv-ange-essoazina.pdf">Télécharger le CV</a>
+      <a class="btn btn-primary" href="#projets">{t('hero.cta.projects')}</a>
+      <a class="btn btn-ghost" href={cvFile}>{t('hero.cta.cv')}</a>
     </div>
 
-    <p class="availability">Stage PFE recherché · 6 mois · dès janvier 2027</p>
+    <p class="availability">{t('hero.availability')}</p>
   </div>
 </section>
 

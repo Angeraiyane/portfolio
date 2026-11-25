@@ -6,20 +6,19 @@
    jamais dans le navigateur du visiteur. On y prépare les données.
    ========================================================================== */
 import '../styles/global.css';   // Astro inclut automatiquement ce CSS dans la page
+import { useTranslations, localePath, type Lang } from '../i18n/ui';
 
-// Les "props" : les paramètres qu'une page peut passer à ce layout.
-// Exemple d'usage : <BaseLayout title="Projets" description="...">
+// Les "props" : les paramètres qu'une page passe à ce layout.
 interface Props {
+  lang: Lang;
   title?: string;
   description?: string;
-  lang?: 'fr' | 'en';
 }
 
-const {
-  title = 'Ange Raïyane ESSOAZINA — AI & Data Engineer',
-  description = "Portfolio d'Ange Raïyane ESSOAZINA, étudiant en Master AI & Data Computing : pipelines de données temps réel, apprentissage fédéré, agents IA.",
-  lang = 'fr',
-} = Astro.props;
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const title = Astro.props.title ?? t('meta.title');
+const description = Astro.props.description ?? t('meta.description');
 ---
 
 <!doctype html>
@@ -33,10 +32,17 @@ const {
     <meta name="description" content={description} />
     <meta name="author" content="Ange Raïyane ESSOAZINA" />
 
+    <!-- hreflang : on dit à Google "cette page existe en français ICI et en anglais LÀ".
+         Il montre ainsi la bonne version à chaque personne qui cherche ton nom. -->
+    <link rel="alternate" hreflang="fr" href={localePath('fr')} />
+    <link rel="alternate" hreflang="en" href={localePath('en')} />
+    <link rel="alternate" hreflang="x-default" href={localePath('fr')} />
+
     <!-- Aperçu quand le lien est partagé (LinkedIn, WhatsApp...) -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_US'} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 

@@ -1,0 +1,71 @@
+---
+/* LangSuggest.astro — petite bannière qui propose l'autre langue.
+   ----------------------------------------------------------------------------
+   Pourquoi ne pas rediriger automatiquement vers l'anglais ?
+   Parce que le robot de Google visite souvent les sites "en anglais" :
+   une redirection automatique l'empêcherait de voir (et donc de référencer)
+   la version française. On PROPOSE donc, sans jamais forcer.
+
+   La bannière est écrite dans l'AUTRE langue : sur la page française,
+   elle s'adresse à un anglophone, en anglais.
+   ---------------------------------------------------------------------------- */
+import { useTranslations, localePath, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const t = useTranslations(other);
+---
+
+<!-- hidden = invisible par défaut ; le script l'affiche seulement si c'est utile -->
+<div class="suggest" data-lang-suggest data-page-lang={lang} data-other-lang={other} lang={other} hidden>
+  <p>{t('suggest.text')}</p>
+  <a class="btn btn-gold" href={localePath(other)} data-lang-choice={other}>{t('suggest.action')}</a>
+  <button type="button" class="close" aria-label={t('suggest.close')}>×</button>
+</div>
+
+<style>
+  .suggest {
+    position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 10;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    width: min(560px, calc(100% - 32px)); padding: 14px 18px;
+    background: rgba(14, 17, 26, 0.96); border: 1px solid #3a4258; border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+  .suggest[hidden] { display: none; }
+  p { flex: 1 1 200px; font-size: 15px; }
+  .btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
+  .close {
+    width: 44px; height: 44px; border: 0; border-radius: 8px; background: transparent;
+    color: var(--muted); font-size: 24px; cursor: pointer;
+  }
+  .close:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+</style>
+
+<script>
+  const box = document.querySelector<HTMLElement>('[data-lang-suggest]');
+  if (box) {
+    const pageLang = box.dataset.pageLang;
+    const other = box.dataset.otherLang;
+
+    // La langue préférée du navigateur : 'fr-FR' -> 'fr', 'en-US' -> 'en'
+    const browserLang = (navigator.language || '').slice(0, 2).toLowerCase();
+
+    let alreadyChose = false;
+    try { alreadyChose = !!localStorage.getItem('lang-choice'); } catch {}
+
+    // On affiche seulement si : la personne n'a jamais choisi, ET son navigateur
+    // parle l'autre langue (ou, sur la page française, n'importe quelle langue
+    // autre que le français : l'anglais est alors le meilleur choix).
+    const wantsOther = other === 'en' ? browserLang !== 'fr' : browserLang === 'fr';
+    if (!alreadyChose && browserLang !== pageLang && wantsOther) box.hidden = false;
+
+    box.querySelector('.close')?.addEventListener('click', () => {
+      box.hidden = true;
+      try { localStorage.setItem('lang-choice', pageLang ?? ''); } catch {}
+    });
+    box.querySelector('[data-lang-choice]')?.addEventListener('click', () => {
+      try { localStorage.setItem('lang-choice', other ?? ''); } catch {}
+    });
+  }
+</script>

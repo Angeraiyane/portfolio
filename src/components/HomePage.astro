@@ -1,0 +1,47 @@
+---
+/* HomePage.astro — tout le contenu de l'accueil, dans UNE langue.
+   Les deux pages (src/pages/index.astro et src/pages/en/index.astro)
+   l'utilisent avec lang="fr" ou lang="en" : un seul code, deux langues. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import DelphiBand from './DelphiBand.astro';
+import LangSuggest from './LangSuggest.astro';
+import { useTranslations, type Lang, type UIKey } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Les sections à venir. data-gem indiquera plus tard à la scène 3D
+// quelle ambiance de gemme afficher quand on arrive sur la section.
+const sections: { id: string; title: UIKey; gem: string }[] = [
+  { id: 'apropos', title: 'nav.about', gem: 'quartz-rose' },
+  { id: 'projets', title: 'nav.projects', gem: 'lapis' },
+  { id: 'experience', title: 'nav.experience', gem: 'emerald' },
+  { id: 'competences', title: 'nav.skills', gem: 'amethyst' },
+  { id: 'contact', title: 'nav.contact', gem: 'ruby' },
+];
+---
+
+<BaseLayout lang={lang}>
+  <Header lang={lang} />
+  <main>
+    <Hero lang={lang} />
+    <DelphiBand lang={lang} />
+
+    {sections.map((s) => (
+      <section id={s.id} class="section" data-gem={s.gem}>
+        <div class="container">
+          <h2 class="section-title">{t(s.title)}</h2>
+          <p class="placeholder">{t('section.wip')}</p>
+        </div>
+      </section>
+    ))}
+  </main>
+  <LangSuggest lang={lang} />
+</BaseLayout>
+
+<style>
+  .placeholder { color: var(--faint); }
+</style>
